@@ -1,0 +1,32 @@
+# Secrets and local environment configuration
+.env
+.env.*
+!.env.example
+
+# Python cache and virtual environments
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Editor configuration
+.vscode/
+.idea/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Generated benchmark/report artifacts
+results/
+*.csv
+*.png
+*.pdf
+
+# Local Docker overrides
+compose.override.yaml
