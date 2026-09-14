@@ -113,7 +113,7 @@ docker run --rm hello-world
 Use SSH if your GitHub SSH key is configured:
 
 ```bash
-git clone git@github.com:YOUR-GITHUB-USERNAME/event-ticketing-service.git
+git clone git@github.com:YOUR-GITHUB-USERNAME/comp-642-event-ticketing-service.git
 cd event-ticketing-service
 ```
 
