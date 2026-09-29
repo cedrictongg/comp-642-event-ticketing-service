@@ -71,6 +71,7 @@ services:
       - "127.0.0.1:8000:8000"
     volumes:
       - ./app:/usr/local/app/app
+      - ./tests:/usr/local/app/tests
     depends_on:
       mysql:
         condition: service_healthy

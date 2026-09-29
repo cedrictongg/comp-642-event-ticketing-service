@@ -62,6 +62,8 @@ jobs:
           echo "$response" | grep -q '"mysql":"healthy"'
           echo "$response" | grep -q '"mongodb":"healthy"'
           echo "$response" | grep -q '"redis":"healthy"'
+      - name: Run Redis service tests
+        run: docker compose exec -T api pytest -q -p no:cacheprovider tests/test_redis_services.py
 
       - name: Save Compose logs
         if: always()
