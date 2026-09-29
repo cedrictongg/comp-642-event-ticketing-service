@@ -29,4 +29,5 @@ results/
 *.pdf
 
 # Local Docker overrides
-compose.override.yaml
+compose.override.yamldocker-compose.log
+*.log

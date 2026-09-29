@@ -1,0 +1,77 @@
+name: Docker Compose CI
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  docker-compose-test:
+    name: Clean Docker Compose Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create CI environment file
+        run: |
+          cat > .env <<'ENVFILE'
+          MYSQL_DATABASE=event_ticketing
+          MYSQL_USER=ticketing_user
+          MYSQL_PASSWORD=ci_user_password
+          MYSQL_ROOT_PASSWORD=ci_root_password
+          MYSQL_HOST=mysql
+          MYSQL_PORT=3306
+          MONGODB_HOST=mongodb
+          MONGODB_PORT=27017
+          MONGODB_DATABASE=event_ticketing
+          REDIS_HOST=redis
+          REDIS_PORT=6379
+          EVENT_CACHE_TTL_SECONDS=120
+          ENVFILE
+
+      - name: Validate Docker Compose configuration
+        run: docker compose config
+
+      - name: Build FastAPI image without cache
+        run: docker compose build --no-cache api
+
+      - name: Start services and wait for health checks
+        run: docker compose up --detach --wait --wait-timeout 90
+
+      - name: Show container status
+        run: docker compose ps
+
+      - name: Test FastAPI health endpoint
+        run: |
+          response=$(curl --fail --silent --show-error \
+            http://127.0.0.1:8000/health)
+
+          echo "$response"
+
+          echo "$response" | grep -q '"api":"healthy"'
+          echo "$response" | grep -q '"mysql":"healthy"'
+          echo "$response" | grep -q '"mongodb":"healthy"'
+          echo "$response" | grep -q '"redis":"healthy"'
+
+      - name: Save Compose logs
+        if: always()
+        run: docker compose logs --no-color > docker-compose.log
+
+      - name: Upload logs if CI fails
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-compose-logs
+          path: docker-compose.log
+          retention-days: 7
+
+      - name: Stop and remove services
+        if: always()
+        run: docker compose down --volumes --remove-orphans
