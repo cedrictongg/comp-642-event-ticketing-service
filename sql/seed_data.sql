@@ -23,7 +23,7 @@ INSERT INTO EVENTS (EVENT_TITLE, EVENT_DATETIME, VENUE_ID) VALUES
 ('Iggy Pop 2', '2026-05-25 20:00:00', 1),
 ('John Stamos Live', '2026-05-25 20:00:00', 2),
 ('Dave Coulier Live', '2026-05-25 20:00:00', 3),
-('Golden State Warrios at Los Angeles Lakers', '2026-05-25 19:15:00', 9),
+('Golden State Warriors at Los Angeles Lakers', '2026-05-25 19:15:00', 9),
 ('Ariel Stink', '2026-05-27 20:00:00', 6),
 ('Ariel Stink', '2026-05-25 20:00:00', 4),
 ('Dave Matthews Sextet', '2026-05-25 20:00:00', 5),
@@ -34,7 +34,37 @@ INSERT INTO EVENTS (EVENT_TITLE, EVENT_DATETIME, VENUE_ID) VALUES
 ('Rocket', '2026-06-25 20:00:00', 1),
 ('Julie', '2026-06-25 20:00:00', 2);
 
-INSERT INTO TICKETTYPES (TICKETTYPE) VALUES
+INSERT INTO EVENT_CATEGORIES (CATEGORY_ID, CATEGORY_NAME) VALUES
+(1, 'Music'),
+(2, 'Comedy and Entertainment'),
+(3, 'Sports'),
+(4, 'Business and Technology'),
+(5, 'Workshop and Classes');
+
+INSERT INTO EVENT_CATEGORY_ASSIGNMENTS (EVENT_ID, CATEGORY_ID) VALUES
+-- MUSIC
+(1, 1),
+(7, 1),
+(10, 1),
+(11, 1),
+-- COMEDY AND ENTERTAINMENT
+(2, 2),
+(3, 2),
+(5, 2),
+(6, 2),
+(10, 2),
+(13, 2),
+-- SPORTS
+(4, 3),
+-- BUSINESS AND TECHNOLOGY
+(8, 4),
+(12, 4),
+-- WORKSHOP AND CLASSES
+(9, 5);
+
+
+
+INSERT INTO TICKET_TYPES (TICKET_TYPE) VALUES
 ('Concert'),
 ('Conference'),
 ('Workshop'),
@@ -47,7 +77,7 @@ INSERT INTO ORDERS (USER_ID) VALUES
 (3),
 (4);
 
-INSERT INTO ORDERITEMS (ORDER_ID, EVENT_ID, TICKET_TYPE, TICKET_PRICE) VALUES
+INSERT INTO ORDER_ITEMS (ORDER_ID, EVENT_ID, TICKET_TYPE, TICKET_PRICE) VALUES
 (1, 1, 'Concert', 50),
 (2, 5, 'Concert', 50),
 (3, 1, 'Concert', 50),
