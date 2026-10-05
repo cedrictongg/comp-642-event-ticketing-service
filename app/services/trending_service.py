@@ -17,12 +17,12 @@ def increment_event_view(event_id):
     )
 
 
-def get_top_trending_events(limit=10):
+def get_top_trending_events():
     # https://redis.io/docs/latest/commands/zrevrange/
     ranked_events = redis_client.zrevrange(
         TRENDING_EVENTS_KEY,
         0,
-        limit - 1,
+        9,
         withscores=True
     )
 

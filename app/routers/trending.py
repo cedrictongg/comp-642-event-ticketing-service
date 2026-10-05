@@ -1,5 +1,7 @@
 from fastapi import APIRouter
 
+from app.services.trending_service import get_top_trending_events
+
 router = APIRouter(
     prefix="/trending",
     tags=["Trending"]
@@ -7,7 +9,7 @@ router = APIRouter(
 
 
 @router.get("")
-def get_trending_events():
+def get_trending():
     return {
-        "message": "Redis trending-events endpoint placeholder."
+        "events": get_top_trending_events()
     }

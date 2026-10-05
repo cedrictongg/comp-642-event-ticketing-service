@@ -25,7 +25,8 @@ def get_cached_event(event_id):
 def cache_event(event_id, event_data):
     redis_client.set(
         get_event_cache_key(event_id),
-        json.dumps(event_data),
+        # need to convert unsupported values to strings
+        json.dumps(event_data, default=str),
         ex=settings.event_cache_ttl_seconds
     )
 
