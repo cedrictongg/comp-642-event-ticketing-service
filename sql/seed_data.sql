@@ -34,41 +34,33 @@ INSERT INTO EVENTS (EVENT_TITLE, EVENT_DATETIME, VENUE_ID) VALUES
 ('Rocket', '2026-06-25 20:00:00', 1),
 ('Julie', '2026-06-25 20:00:00', 2);
 
-INSERT INTO EVENT_CATEGORIES (CATEGORY_ID, CATEGORY_NAME) VALUES
-(1, 'Music'),
-(2, 'Comedy and Entertainment'),
-(3, 'Sports'),
-(4, 'Business and Technology'),
-(5, 'Workshop and Classes');
-
-INSERT INTO EVENT_CATEGORY_ASSIGNMENTS (EVENT_ID, CATEGORY_ID) VALUES
--- MUSIC
-(1, 1),
-(7, 1),
-(10, 1),
-(11, 1),
--- COMEDY AND ENTERTAINMENT
-(2, 2),
-(3, 2),
-(5, 2),
-(6, 2),
-(10, 2),
-(13, 2),
--- SPORTS
-(4, 3),
--- BUSINESS AND TECHNOLOGY
-(8, 4),
-(12, 4),
--- WORKSHOP AND CLASSES
-(9, 5);
-
-
-
 INSERT INTO TICKET_TYPES (TICKET_TYPE) VALUES
-('Concert'),
-('Conference'),
-('Workshop'),
-('Sporting Event');
+('Music'),
+('Comedy and Entertainment'),
+('Sports'),
+('Business and Technology'),
+('Workshops and Classes');
+
+INSERT INTO TICKET_TYPE_ASSIGNMENTS (EVENT_ID, TICKET_TYPE) VALUES
+-- MUSIC
+(1, 'Music'),
+(7, 'Music'),
+(10, 'Music'),
+(11, 'Music'),
+-- COMEDY AND ENTERTAINMENT
+(2, 'Comedy and Entertainment'),
+(3, 'Comedy and Entertainment'),
+(5, 'Comedy and Entertainment'),
+(6, 'Comedy and Entertainment'),
+(10, 'Comedy and Entertainment'),
+(13, 'Comedy and Entertainment'),
+-- SPORTS
+(4,'Sports'),
+-- BUSINESS AND TECHNOLOGY
+(8, 'Business and Technology'),
+(12, 'Business and Technology'),
+-- WORKSHOP AND CLASSES
+(9, 'Workshops and Classes');
 
 INSERT INTO ORDERS (USER_ID) VALUES
 (1),
@@ -77,15 +69,15 @@ INSERT INTO ORDERS (USER_ID) VALUES
 (3),
 (4);
 
-INSERT INTO ORDER_ITEMS (ORDER_ID, EVENT_ID, TICKET_TYPE, TICKET_PRICE) VALUES
-(1, 1, 'Concert', 50),
-(2, 5, 'Concert', 50),
-(3, 1, 'Concert', 50),
-(3, 6, 'Concert', 45),
-(3, 10, 'Concert', 20),
-(4, 8, 'Conference', 200),
-(5, 9, 'Workshop', 15),
-(5, 4, 'Sporting Event', 700);
+INSERT INTO ORDER_ITEMS (ORDER_ID, EVENT_ID, TICKET_PRICE) VALUES
+(1, 1, 50),
+(2, 5, 50),
+(3, 1, 50),
+(3, 6, 45),
+(3, 10, 20),
+(4, 8, 200),
+(5, 9, 15),
+(5, 4, 700);
 
 INSERT INTO PAYMENTS (ORDER_ID, PAYMENT_AMT) VALUES
 (1, 50),

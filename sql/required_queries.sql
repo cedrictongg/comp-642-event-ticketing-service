@@ -1,23 +1,61 @@
--- Query 1
--- Find all events at a particular venue.
+USE EVENT_TICKETING;
 
--- Query 2
--- Find all tickets purchased by a particular user.
+#QUERY 1 Find all events at a particular venue.
+SELECT * FROM EVENTS WHERE VENUE_ID = 1;
 
--- Query 3
--- Calculate total tickets sold for each event.
+#QUERY 2 Find all tickets purchased by a particular user.
 
--- Query 4
--- Determine remaining ticket inventory for an event.
+SELECT O.USER_ID, OI.* FROM ORDER_ITEMS OI JOIN ORDERS O ON O.ORDER_ID = OI.ORDER_ID WHERE O.USER_ID = 4;
 
--- Query 5
--- Calculate total revenue for each event.
+#QUERY 3 Calculate total tickets sold for each event.
 
--- Query 6
--- Identify the customers who have purchased the most tickets.
+SELECT EVENT_ID, COUNT(*) AS TICKET_COUNT FROM ORDER_ITEMS GROUP BY EVENT_ID ORDER BY TICKET_COUNT;
 
--- Query 7
--- Find events whose sales exceed a specified threshold.
+#QUERY 4 Determine remaining ticket inventory for an event.
 
--- Query 8
--- Calculate monthly ticket revenue.
+SELECT VENUES.VENUE_CAPACITY - EV_CNT_VEN.TICKET_COUNT AS TICKETS_REMAINING
+	FROM (
+		SELECT CNT.*, EVENTS.VENUE_ID 
+			FROM (
+				SELECT EVENT_ID, COUNT(*) AS TICKET_COUNT 
+		 		FROM ORDER_ITEMS 
+		 		GROUP BY EVENT_ID
+			 ) CNT
+		 JOIN EVENTS ON EVENTS.EVENT_ID = CNT.EVENT_ID
+		 WHERE EVENTS.EVENT_ID = 1
+	) EV_CNT_VEN
+JOIN VENUES 
+ON VENUES.VENUE_ID = EV_CNT_VEN.VENUE_ID;
+
+#QUERY 5 Calculate total revenue from each event
+
+SELECT EVENT_ID, SUM(TICKET_PRICE) FROM ORDER_ITEMS GROUP BY EVENT_ID;
+
+#QUERY 6 Identify the customers who have purchased the most tickets
+
+SELECT FULL_ORDERS.USER_ID, COUNT(*) AS TICKETS_PURCHASED
+FROM (
+	SELECT O.*, OI.ITEM_ID, OI.EVENT_ID, OI.TICKET_PRICE
+		FROM ORDERS O
+		LEFT JOIN ORDER_ITEMS OI
+		ON O.ORDER_ID = OI.ORDER_ID
+) FULL_ORDERS
+GROUP BY FULL_ORDERS.USER_ID
+ORDER BY TICKETS_PURCHASED DESC
+LIMIT 10;
+
+#QUERY 7 Find events whose sales exceed a specified threshold
+
+SELECT * FROM (
+	SELECT EVENT_ID, COUNT(*) AS TICKET_SALES 
+		FROM ORDER_ITEMS
+		GROUP BY event_id 
+	) A WHERE A.TICKET_SALES > 1;
+
+#QUERY 8 Calculate monthly ticket revenue
+
+SELECT MONTH(E.EVENT_DATETIME) AS MONTH_OF, SUM(OI.TICKET_PRICE) AS MONTHLY_REVENUE
+ FROM EVENTS E
+ JOIN ORDER_ITEMS OI
+ ON E.EVENT_ID = OI.EVENT_ID
+ GROUP BY MONTH_OF;
