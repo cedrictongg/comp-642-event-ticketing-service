@@ -7,7 +7,8 @@ from app.database import mysql_engine, redis_client
 from app.services.cache_service import invalidate_event_cache
 
 
-router = APIRouter(prefix="/admin", tags=["Admin"])
+router = APIRouter(prefix = "/admin", tags = ["Admin"])
+
 
 def validate_event(data):
     try:
@@ -47,8 +48,8 @@ def check_venue(connection, venue_id):
         raise HTTPException(404, "Venue not found")
 
 
-@router.post("/events", status_code=201)
-def create_event(data=Body(...)):
+@router.post("/events", status_code = 201)
+def create_event(data = Body(...)):
     values = validate_event(data)
 
     with mysql_engine.begin() as connection:
@@ -70,7 +71,7 @@ def create_event(data=Body(...)):
 
 
 @router.put("/events/{event_id}")
-def update_event(event_id, data=Body(...)):
+def update_event(event_id, data = Body(...)):
     values = validate_event(data)
     values["event_id"] = event_id
 
@@ -133,13 +134,14 @@ def get_event_activity(event_id):
         "views": int(views or 0)
     }
 
+
 @router.get("/events/{event_id}/sales")
 def get_event_sales(event_id):
     with mysql_engine.connect() as connection:
         sales = connection.execute(
             text("""
                 SELECT E.EVENT_ID, E.EVENT_TITLE, E.TOTAL_SALES, E.TICKETS_SOLD, V.VENUE_NAME,
-                    V.VENUE_CAPACITY, E.TICKETS_SOLD/V.VENUE_CAPACITY AS  SELL_THROUGH
+                    V.VENUE_CAPACITY, E.TICKETS_SOLD/V.VENUE_CAPACITY AS SELL_THROUGH
                 FROM EVENTS E
                 JOIN VENUES V
                 ON E.VENUE_ID = V.VENUE_ID
@@ -147,6 +149,7 @@ def get_event_sales(event_id):
             """),
             {"event_id": event_id}
         ).mappings().first()
+
         if sales is None:
             raise HTTPException(404, "No event found")
         
@@ -159,3 +162,49 @@ def get_event_sales(event_id):
             "venueCapacity": sales["VENUE_CAPACITY"],
             "sellThrough": sales["SELL_THROUGH"]
         }
+
+
+@router.post("/events/{event_id}/tickets", status_code = 201)
+def assign_ticket_type(event_id: int, ticket_type: str = Body(..., embed = True)):
+    with mysql_engine.connect() as conn:
+        event = conn.execute(
+            text("SELECT EVENT_ID FROM EVENTS WHERE EVENT_ID = :id"),
+            {"id": event_id}
+        ).fetchone()
+
+        if not event:
+            raise HTTPException(status_code = 404, detail = "Event not found")
+
+        try:
+            conn.execute(
+                text("INSERT INTO TICKET_TYPE_ASSIGNMENTS (EVENT_ID, TICKET_TYPE) VALUES (:id, :type)"),
+                {"id": event_id, "type": ticket_type}
+            )
+            conn.commit()
+        except Exception:
+            conn.rollback()
+            raise HTTPException(status_code = 400, detail = "Ticket type already assigned or invalid")
+
+        return {"event_id": event_id, "ticket_type": ticket_type}
+
+
+@router.get("/events/{event_id}/inventory")
+def get_event_inventory(event_id: int):
+    with mysql_engine.connect() as conn:
+        query = text("""
+            SELECT 
+                E.EVENT_ID,
+                E.EVENT_TITLE,
+                V.VENUE_CAPACITY AS total_capacity,
+                E.TICKETS_SOLD AS tickets_sold,
+                (V.VENUE_CAPACITY - E.TICKETS_SOLD) AS remaining_inventory
+            FROM EVENTS E
+            JOIN VENUES V ON E.VENUE_ID = V.VENUE_ID
+            WHERE E.EVENT_ID = :id
+        """)
+        
+        row = conn.execute(query, {"id": event_id}).mappings().fetchone()
+        if not row:
+            raise HTTPException(status_code = 404, detail = "Event not found")
+
+        return dict(row)
