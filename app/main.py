@@ -6,7 +6,7 @@ from app.database import (
     mysql_engine,
     redis_client
 )
-from app.routers import content, events, orders, trending, users
+from app.routers import content, events, orders, trending, users, admin
 
 app = FastAPI(
     title="Event Ticketing Service API",
@@ -22,7 +22,7 @@ app.include_router(users.router)
 app.include_router(orders.router)
 app.include_router(content.router)
 app.include_router(trending.router)
-
+app.include_router(admin.router)
 
 @app.get("/", tags=["System"])
 def root():

@@ -130,3 +130,9 @@ def get_event(event_id):
         "source": "database",
         "event": event_data
     }
+
+###j
+@router.get("/{event_id}/sales")
+def get_sales(event_id):
+    event_id = event_id
+    return None
