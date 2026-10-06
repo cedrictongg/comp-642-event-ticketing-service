@@ -6,12 +6,12 @@ from app.database import (
     mysql_engine,
     redis_client
 )
-from app.routers import content, events, orders, trending, users, admin
+from app.routers import admin, content, events, orders, trending, users
 
 app = FastAPI(
-    title="Event Ticketing Service API",
-    version="0.1.0",
-    description=(
+    title = "Event Ticketing Service API",
+    version = "0.1.0",
+    description = (
         "COMP 642 course project using MySQL, "
         "MongoDB, Redis, and FastAPI."
     )
@@ -24,7 +24,8 @@ app.include_router(content.router)
 app.include_router(trending.router)
 app.include_router(admin.router)
 
-@app.get("/", tags=["System"])
+
+@app.get("/", tags = ["System"])
 def root():
     return {
         "application": "Event Ticketing Service API",
@@ -33,7 +34,7 @@ def root():
     }
 
 
-@app.get("/health", tags=["System"])
+@app.get("/health", tags = ["System"])
 def health_check():
     service_status = {
         "api": "healthy",
@@ -67,8 +68,8 @@ def health_check():
 
     if "unhealthy" in service_status.values():
         raise HTTPException(
-            status_code=503,
-            detail=service_status
+            status_code = 503,
+            detail = service_status
         )
 
     return service_status
