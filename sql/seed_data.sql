@@ -20,19 +20,19 @@ INSERT INTO VENUES (VENUE_NAME, VENUE_CAPACITY) VALUES
 ('Work Shop Workshop', 100);
 
 INSERT INTO EVENTS (EVENT_TITLE, EVENT_DATETIME, VENUE_ID) VALUES
-('Iggy Pop 2', '2026-05-25 20:00:00', 1),
-('John Stamos Live', '2026-05-25 20:00:00', 2),
-('Dave Coulier Live', '2026-05-25 20:00:00', 3),
-('Golden State Warriors at Los Angeles Lakers', '2026-05-25 19:15:00', 9),
-('Ariel Stink', '2026-05-27 20:00:00', 6),
-('Ariel Stink', '2026-05-25 20:00:00', 4),
-('Dave Matthews Sextet', '2026-05-25 20:00:00', 5),
-('Dreamforce LA 2026', '2026-05-28 07:00:00', 7),
-('Hammering with Hammers', '2026-05-20 10:00:00', 10),
-('Guck', '2026-05-25 21:00:00', 8),
-('The Growlers', '2026-05-20 19:00:00', 6),
-('Rocket', '2026-06-25 20:00:00', 1),
-('Julie', '2026-06-25 20:00:00', 2);
+('Iggy Pop 2', '2027-05-25 20:00:00', 1),
+('John Stamos Live', '2027-05-25 20:00:00', 2),
+('Dave Coulier Live', '2027-05-25 20:00:00', 3),
+('Golden State Warriors at Los Angeles Lakers', '2026-10-21 19:15:00', 9),
+('Ariel Stink', '2027-05-27 20:00:00', 6),
+('Ariel Stink', '2027-05-25 20:00:00', 4),
+('Dave Matthews Sextet', '2027-05-25 20:00:00', 5),
+('Dreamforce LA 2026', '2027-05-28 07:00:00', 7),
+('Hammering with Hammers', '2027-05-20 10:00:00', 10),
+('Guck', '2027-05-25 21:00:00', 8),
+('The Growlers', '2027-05-20 19:00:00', 6),
+('Rocket', '2027-06-25 20:00:00', 1),
+('Julie', '2027-06-25 20:00:00', 2);
 
 INSERT INTO TICKET_TYPES (TICKET_TYPE) VALUES
 ('Music'),
